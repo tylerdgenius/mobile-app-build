@@ -6,7 +6,6 @@ import {News} from 'src/hooks/types';
 import {EmptyNews} from './emptyNews';
 
 export const AllNews: React.FC<AllNewsProps> = ({news}) => {
-  console.log({news});
   return (
     <FlatList<News>
       data={news}

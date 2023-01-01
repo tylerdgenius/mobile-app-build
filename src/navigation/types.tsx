@@ -8,3 +8,12 @@ export type RootStackParamList = {
 };
 
 export type HomeScreenTab = BottomTabScreenProps<RootStackParamList, 'Home'>;
+export type MessagesScreenTab = BottomTabScreenProps<
+  RootStackParamList,
+  'Messages'
+>;
+export type LocationScreenTab = BottomTabScreenProps<
+  RootStackParamList,
+  'Location'
+>;
+export type UserScreenTab = BottomTabScreenProps<RootStackParamList, 'User'>;

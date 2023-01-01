@@ -1,3 +1,4 @@
+import {BackButton, SearchBar} from '../../components';
 import {AbortController} from 'native-abort-controller';
 import React from 'react';
 import {
@@ -8,15 +9,13 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
 import {useGetNews} from 'src/hooks/useGetNews';
-import {BackButton, SearchBar} from '../components';
-import {HomeScreenTab} from '../navigation/types';
 import {AllNews} from './components';
+import {HomeScreenTab} from '../../navigation';
+import {MainLayout} from 'src/layouts';
 
 export const HomeScreen: React.FC<HomeScreenTab> = ({}) => {
-  const {top} = useSafeAreaInsets();
-
   const {news, isLoading, setIsLoading, triggerFetch} = useGetNews({
     url: 'https://api.thenewsapi.com/v1/news/top?api_token=F1FSIWv7wHJUcQNlrBeqTQkQxQIeSkMEIjvZDeCX&locale=us&limit=3',
   });
@@ -30,46 +29,48 @@ export const HomeScreen: React.FC<HomeScreenTab> = ({}) => {
   }, [triggerFetch, setIsLoading]);
 
   return (
-    <View style={[styles.homeContainer, {paddingTop: top}]}>
-      <View style={styles.backButtonContainer}>
-        <BackButton />
+    <MainLayout>
+      <View style={styles.homeContainer}>
+        <View style={styles.backButtonContainer}>
+          <BackButton />
+        </View>
+        <View style={styles.searchContainer}>
+          <Text style={styles.searchText}>Search</Text>
+          <SearchBar />
+        </View>
+        <View style={styles.newsContainer}>
+          <Text style={[styles.searchText, styles.newsText]}>News</Text>
+        </View>
+        <View style={styles.scrollNewsSection}>
+          {isLoading && <ActivityIndicator />}
+          <ScrollView
+            style={styles.scrollNewsContainer}
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+            }>
+            <AllNews news={news} />
+          </ScrollView>
+        </View>
       </View>
-      <View style={styles.searchContainer}>
-        <Text style={styles.searchText}>Search</Text>
-        <SearchBar />
-      </View>
-      <View style={styles.newsContainer}>
-        <Text style={[styles.searchText, styles.newsText]}>News</Text>
-      </View>
-      <View style={styles.scrollNewsSection}>
-        {isLoading && <ActivityIndicator />}
-        <ScrollView
-          style={styles.scrollNewsContainer}
-          refreshControl={
-            <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
-          }>
-          <AllNews news={news} />
-        </ScrollView>
-      </View>
-    </View>
+    </MainLayout>
   );
 };
 
 const styles = StyleSheet.create({
   homeContainer: {
-    paddingHorizontal: 20,
     flex: 1,
     backgroundColor: 'white',
   },
   backButtonContainer: {
-    flex: 0.1,
+    flex: 0.05,
     justifyContent: 'center',
   },
   newsContainer: {
     flex: 0.05,
   },
   searchContainer: {
-    flex: 0.2,
+    flex: 0.25,
+    justifyContent: 'center',
   },
   scrollNewsSection: {
     flex: 0.63,
